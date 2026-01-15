@@ -193,8 +193,11 @@ def compute_dataset_statistics(dataset, num_samples: int = 1000) -> Tuple[List[f
     
     sample_size = min(num_samples, len(dataset))
     
-    for i in range(sample_size):
-        image = dataset[i]['image']
+    # Use random sampling for better representation of dataset statistics
+    indices = np.random.choice(len(dataset), sample_size, replace=False)
+    
+    for i in indices:
+        image = dataset[int(i)]['image']
         image = preprocessor.clean_image(image)
         if image is None:
             continue

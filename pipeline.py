@@ -152,6 +152,9 @@ def main():
     print("\n[STEP 7] Saving Split Information")
     print("-" * 80)
     
+    # Save a subset of indices for demonstration purposes (to keep file size manageable)
+    # In production, you may want to save all indices or generate them on-the-fly
+    indices_sample_size = 100
     split_info = {
         'random_seed': 42,
         'train_size': len(splits['train']['indices']),
@@ -159,9 +162,10 @@ def main():
         'test_size': len(splits['test']['indices']),
         'num_classes': len(label_names),
         'class_names': label_names,
-        'train_indices': splits['train']['indices'][:100],  # Save first 100 for demo
-        'val_indices': splits['val']['indices'][:100],
-        'test_indices': splits['test']['indices'][:100]
+        'train_indices_sample': splits['train']['indices'][:indices_sample_size],
+        'val_indices_sample': splits['val']['indices'][:indices_sample_size],
+        'test_indices_sample': splits['test']['indices'][:indices_sample_size],
+        'note': f'Only first {indices_sample_size} indices shown for each split as a sample'
     }
     
     split_file = "split_info.json"

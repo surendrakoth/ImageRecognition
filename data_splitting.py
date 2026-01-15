@@ -125,12 +125,14 @@ class DataSplitter:
         
         print("\n" + "="*60)
     
-    def verify_stratification(self, splits: Dict[str, Dict[str, List]]) -> bool:
+    def verify_stratification(self, splits: Dict[str, Dict[str, List]], 
+                             max_diff_threshold: float = 0.05) -> bool:
         """
         Verify that class distribution is similar across splits.
         
         Args:
             splits: Dictionary containing split information
+            max_diff_threshold: Maximum allowed distribution difference (default: 0.05 = 5%)
             
         Returns:
             True if stratification is good, False otherwise
@@ -163,12 +165,12 @@ class DataSplitter:
         
         print(f"Maximum distribution difference: {max_diff:.4f}")
         
-        # Consider stratification good if max difference is less than 5%
-        is_good = max_diff < 0.05
+        # Check against threshold
+        is_good = max_diff < max_diff_threshold
         if is_good:
             print("✓ Stratification is good!")
         else:
-            print("⚠ Stratification may need adjustment")
+            print(f"⚠ Stratification may need adjustment (threshold: {max_diff_threshold})")
         
         return is_good
 

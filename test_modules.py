@@ -87,27 +87,7 @@ except Exception as e:
 # Test 4: Test DataSplitter with synthetic data
 print("\n[TEST 4] Testing DataSplitter...")
 try:
-    # Create synthetic dataset structure
-    class SyntheticDataset:
-        def __init__(self, size=10000, num_classes=100):
-            # Ensure balanced classes with enough samples for stratification
-            samples_per_class = size // num_classes
-            labels = []
-            for i in range(num_classes):
-                labels.extend([i] * samples_per_class)
-            
-            self.data = {
-                'train': {
-                    'label': labels
-                }
-            }
-        
-        def __getitem__(self, key):
-            return self.data[key]
-        
-        def keys(self):
-            return self.data.keys()
-    
+    # Create synthetic dataset structure that mimics Hugging Face datasets
     class SyntheticSplit:
         def __init__(self, labels):
             self.labels = labels
@@ -120,12 +100,7 @@ try:
         def __len__(self):
             return len(self.labels)
     
-    # Create dataset with proper structure
-    labels = []
-    for i in range(100):
-        labels.extend([i] * 100)
-    
-    class SyntheticDatasetFixed:
+    class SyntheticDataset:
         def __init__(self, labels):
             self.split_data = SyntheticSplit(labels)
         
@@ -137,7 +112,12 @@ try:
         def keys(self):
             return ['train']
     
-    synthetic_dataset = SyntheticDatasetFixed(labels)
+    # Create balanced dataset with 100 classes, 100 samples each
+    labels = []
+    for i in range(100):
+        labels.extend([i] * 100)
+    
+    synthetic_dataset = SyntheticDataset(labels)
     
     splitter = DataSplitter(random_seed=42)
     assert splitter.random_seed == 42
